@@ -204,16 +204,16 @@ mm6_regions: dict[str, RegionData] = {
 
     "Wily Stage 1": RegionData({
         names.wily_1_boss: LocationData(0x000D),
-        names.wily_1_c1: LocationData(0x022C, energy=True),
-        names.wily_1_c2: LocationData(0x022D, oneup_tank=True),
-        names.wily_1_c3: LocationData(0x022E, energy=True),
+        names.wily_1_c1: LocationData(0x022D, oneup_tank=True),
+        names.wily_1_c2: LocationData(0x022C, energy=True),
+        names.wily_1_c3: LocationData(0x022D, oneup_tank=True),
         names.wily_1_c4: LocationData(0x022E, energy=True),
         names.wily_1_c5: LocationData(0x022E, energy=True),
         names.wily_1_c6: LocationData(0x022E, energy=True),
         names.wily_1_c7: LocationData(0x022E, energy=True),
         names.wily_1_c8: LocationData(0x022E, energy=True),
         names.wily_1_c9: LocationData(0x022E, energy=True),
-        names.wily_1_c10: LocationData(0x022E, energy=True),
+        names.wily_1_C10 LocationData(0x022E, energy=True),
         names.wily_1_c11: LocationData(0x022E, energy=True),
         names.wily_1_c12: LocationData(0x022E, energy=True),
         names.wily_1_c13: LocationData(0x022E, energy=True),
@@ -222,6 +222,7 @@ mm6_regions: dict[str, RegionData] = {
         names.wily_1_c16: LocationData(0x022E, energy=True),
         names.wily_1_c17: LocationData(0x022E, energy=True),
         names.wily_1_c18: LocationData(0x022E, energy=True),
+        names.wily_1_c19: LocationData(0x022E, energy=True),
     }, [], [names.mr_x_1_boss, names.mr_x_2_boss,
             names.mr_x_3_boss, names.mr_x_4_boss,]),#should we preface this with rush jet?
 
