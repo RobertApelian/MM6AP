@@ -1,0 +1,295 @@
+from BaseClasses import Location, Region
+from typing import NamedTuple
+from . import names
+
+
+class MM5Location(Location):
+    game = "Mega Man 6"
+
+
+class MM5Region(Region):
+    game = "Mega Man 6"
+
+
+class LocationData(NamedTuple):
+    location_id: int | None
+    energy: bool = False
+    oneup_tank: bool = False
+    eddie : bool = False
+
+
+class RegionData(NamedTuple):
+    locations: dict[str, LocationData]
+    required_items: list[str]
+    required_locations: list[str]
+    parent: str = ""
+
+
+mm6_regions: dict[str, RegionData] = {
+    "Yamato Man Stage": RegionData({
+        names.yamato_man: LocationData(0x0001),
+        names.get_yamato_spear: LocationData(0x0101),
+        names.get_beat_e: LocationData(0x0101),
+        names.yamato_man_c1: LocationData(0x0200, oneup_tank=True),
+        names.yamato_man_c2: LocationData(0x0201, energy=True),
+        names.yamato_man_c3: LocationData(0x0202, oneup_tank=True),
+        names.yamato_man_c4: LocationData(0x0203, energy=True),
+        names.yamato_man_c5: LocationData(0x0203, energy=True),
+        names.yamato_man_c6: LocationData(0x0203, energy=True),
+        names.yamato_man_c7: LocationData(0x0203, energy=True),
+    }, [names.yamato_man_stage], []),
+
+    "Knight Man Stage": RegionData({
+        names.knight_man: LocationData(0x0002),
+        names.get_knight_crusher: LocationData(0x0102),
+        names.get_beat_a: LocationData(0x0102),
+        names.knight_man_c1: LocationData(0x0204, oneup_tank=True),
+        names.knight_man_c2: LocationData(0x0205, energy=True),
+        names.knight_man_c3: LocationData(0x0206, energy=True),
+        #names.knight_man_c4: LocationData(0x0205, eddie=True),
+        names.knight_man_c5: LocationData(0x0205, oneup_tank=True),
+        names.knight_man_c6: LocationData(0x0205, energy=True),
+        names.knight_man_c7: LocationData(0x0205, energy=True),
+        names.knight_man_c8: LocationData(0x0205, energy=True),
+    }, [names.knight_man_stage], []),
+
+    "Centaur Man Stage": RegionData({
+        names.centaur_man: LocationData(0x0003),
+        names.get_centaur_flash: LocationData(0x0103),
+        names.get_beat_t: LocationData(0x0112),
+        names.centaur_man_c1: LocationData(0x0207, energy=True),
+        #names.centaur_man_c2: LocationData(0x020C, oneup_tank = True, eddie=True),
+    }, [names.centaur_man_stage], []),
+
+    "Wind Man Stage": RegionData({
+        names.wind_man: LocationData(0x0004),
+        names.get_wind_storm: LocationData(0x0104),
+        names.wind_man_c1: LocationData(0x020F, energy=True),
+        names.wind_man_c2: LocationData(0x0210, energy=True),
+        names.wind_man_c3: LocationData(0x0211, energy=True),
+        names.wind_man_c4: LocationData(0x0212, energy=True),
+        names.wind_man_c5: LocationData(0x0210, energy=True),
+        names.wind_man_c6: LocationData(0x0210, energy=True),
+        names.wind_man_c7: LocationData(0x0210, oneup_tank=True),
+        names.wind_man_c8: LocationData(0x0210, energy=True),
+        names.wind_man_c9: LocationData(0x0210, oneup_tank=True),
+        names.wind_man_c10: LocationData(0x0210, energy=True),
+        names.wind_man_c11: LocationData(0x0210, energy=True),
+    }, [names.wind_man_stage], []),
+
+    "Flame Man Stage": RegionData({
+        names.flame_man: LocationData(0x0005),
+        names.get_flame_blast: LocationData(0x0105),
+        names.get_rush_power_adapter: LocationData(0x0113),
+        names.flame_man_c1: LocationData(0x0213, energy=True),
+        names.flame_man_c2: LocationData(0x0214, energy=True),
+        names.flame_man_c3: LocationData(0x0213, energy=True),
+        names.flame_man_c4: LocationData(0x0213, energy=True),
+        names.flame_man_c5: LocationData(0x0213, energy=True),
+        names.flame_man_c6: LocationData(0x0213, oneup_tank=True),
+    }, [names.flame_man_stage], []),
+
+    "Blizzard Man Stage": RegionData({
+        names.blizzard_man: LocationData(0x0006),
+        names.get_blizzard_attack: LocationData(0x0106),
+        names.blizzard_man_c1: LocationData(0x0215, energy = True),
+        names.blizzard_man_c2: LocationData(0x0215, oneup_tank = True),
+        names.blizzard_man_c3: LocationData(0x0215, energy = True),
+        names.blizzard_man_c4: LocationData(0x0215, oneup_tank = True),
+        names.blizzard_man_c5: LocationData(0x0215, oneup_tank = True),
+        names.blizzard_man_c6: LocationData(0x0215, energy = True),
+        names.blizzard_man_c7: LocationData(0x0215, energy = True),
+        names.blizzard_man_c8: LocationData(0x0215, energy = True),
+        names.blizzard_man_c9: LocationData(0x0215, energy = True),
+        names.blizzard_man_c10: LocationData(0x0215, oneup_tank = True),
+    }, [names.blizzard_man_stage], []),
+
+    "Plant Man Stage": RegionData({
+        names.plant_man: LocationData(0x0007),
+        names.get_plant_barrier: LocationData(0x0107),
+        names.get_rush_jet_adapter: LocationData(0x0107),
+        names.plant_man_c1: LocationData(0x0216, energy=True),
+        names.plant_man_c2: LocationData(0x0217, oneup_tank=True),
+        #names.plant_man_c3: LocationData(0x0219, oneup_tank = True, eddie=True),
+        names.plant_man_c4: LocationData(0x0218, energy=True),
+        names.plant_man_c5: LocationData(0x0219, energy = True),
+        names.plant_man_c6: LocationData(0x0219, energy = True),
+        names.plant_man_c7: LocationData(0x0219, energy = True),
+        names.plant_man_c8: LocationData(0x0219, energy = True),
+        names.plant_man_c9: LocationData(0x0219, energy = True),
+        names.plant_man_c10: LocationData(0x0219, energy = True),
+        names.plant_man_c11: LocationData(0x0219, energy = True),
+        names.plant_man_c12: LocationData(0x0219, energy = True),
+        names.plant_man_c13: LocationData(0x0219, energy = True),
+        names.plant_man_c14: LocationData(0x0219, energy = True),
+        names.plant_man_c15: LocationData(0x0219, energy = True),
+        names.plant_man_c16: LocationData(0x0219, energy = True),
+        names.plant_man_c17: LocationData(0x0219, energy = True),
+        names.plant_man_c18: LocationData(0x0219, energy = True),
+        names.plant_man_c19: LocationData(0x0219, energy = True),
+        names.plant_man_c20: LocationData(0x0219, energy = True),
+    }, [names.plant_man_stage], []),
+
+    "Tomahawk Man Stage": RegionData({
+        names.tomahawk_man: LocationData(0x0008),
+        names.get_silver_tomahawk: LocationData(0x0108),
+        names.get_beat_b: LocationData(0x0108),
+        names.tomahawk_man_c1: LocationData(0x021C, energy = True),
+        names.tomahawk_man_c2: LocationData(0x021A, oneup_tank=True),
+        #names.tomahawk_man_c3: LocationData(0x021B, eddie=True),
+        names.tomahawk_man_c4: LocationData(0x021C, energy = True),
+        names.tomahawk_man_c5: LocationData(0x021C, energy = True),
+        names.tomahawk_man_c6: LocationData(0x021C, energy = True),
+        names.tomahawk_man_c7: LocationData(0x021C, oneup_tank = True),
+        names.tomahawk_man_c8: LocationData(0x021C, energy = True),
+        names.tomahawk_man_c9: LocationData(0x021C, oneup_tank = True, energy = True),
+        names.tomahawk_man_c10: LocationData(0x021C, energy = True),
+    }, [names.tomahawk_man_stage], []),
+
+    "Mr X Fortress 1": RegionData({
+        names.mr_x_1_boss: LocationData(0x0009),
+        names.mr_x_1_c1: LocationData(0x021D, oneup_tank=True),
+        names.mr_x_1_c2: LocationData(0x021E, energy=True),
+        names.mr_x_1_c3: LocationData(0x021F, energy=True),
+        names.mr_x_1_c4: LocationData(0x0220, energy=True),
+        names.mr_x_1_c5: LocationData(0x0221, energy=True),
+        names.mr_x_1_c6: LocationData(0x0221, energy=True),
+        names.mr_x_1_c7: LocationData(0x0221, energy=True),
+        names.mr_x_1_c8: LocationData(0x0221, energy=True),
+        names.mr_x_1_c9: LocationData(0x0221, energy=True),
+        names.mr_x_1_c10: LocationData(0x0221, energy=True),
+        names.mr_x_1_c11: LocationData(0x021D, oneup_tank=True),
+        names.mr_x_1_c12: LocationData(0x021D, oneup_tank=True),
+        names.mr_x_1_c13: LocationData(0x021D, oneup_tank=True),
+        names.mr_x_1_c14: LocationData(0x021D, oneup_tank=True),
+    }, [names.mr_x_1_stage], []),
+
+    "Mr X Fortress 2": RegionData({
+        names.mr_x_2_boss: LocationData(0x000A),
+        names.mr_x_2_c1: LocationData(0x0222, energy=True),
+        names.mr_x_2_c2: LocationData(0x0223, energy=True),
+        names.mr_x_2_c3: LocationData(0x0224, energy=True),
+        names.mr_x_2_c4: LocationData(0x0225, energy=True),
+    }, [names.mr_x_2_stage], []),
+
+    "Mr X Fortress 3": RegionData({
+        names.mr_x_3_boss: LocationData(0x000B),
+        names.mr_x_3_c1: LocationData(0x0228, oneup_tank=True),
+        names.mr_x_3_c2: LocationData(0x0229, oneup_tank=True),
+        names.mr_x_3_c3: LocationData(0x022A, energy=True),
+        names.mr_x_3_c4: LocationData(0x022B, oneup_tank=True),
+        names.mr_x_3_c5: LocationData(0x022B, energy=True),
+        names.mr_x_3_c6: LocationData(0x022B, energy=True),
+        names.mr_x_3_c7: LocationData(0x022B, energy=True),
+    }, [names.mr_x_3_stage], []),
+
+    "Mr X Fortress 4": RegionData({
+        names.mr_x_4_boss: LocationData(0x000C),
+        names.mr_x_4_c1: LocationData(0x0228, energy=True),
+        names.mr_x_4_c2: LocationData(0x0229, energy=True),
+        names.mr_x_4_c3: LocationData(0x022A, energy=True),
+        names.mr_x_4_c4: LocationData(0x022B, energy=True),
+        names.mr_x_4_c5: LocationData(0x022B, energy=True),
+        names.mr_x_4_c6: LocationData(0x022B, energy=True),
+        names.mr_x_4_c8: LocationData(0x022B, energy=True),
+        names.mr_x_4_c9: LocationData(0x022B, energy=True),
+        names.mr_x_4_c10: LocationData(0x022B, oneup_tank=True),
+        names.mr_x_4_c11: LocationData(0x022B, energy=True),
+        names.mr_x_4_c12: LocationData(0x022B, energy=True),
+        names.mr_x_4_c13: LocationData(0x022B, energy=True),
+        names.mr_x_4_c14: LocationData(0x022B, energy=True),
+        names.mr_x_4_c15: LocationData(0x022B, oneup_tank=True),
+        names.mr_x_4_c16: LocationData(0x022B, oneup_tank=True),
+    }, [names.mr_x_4_stage], []),
+
+    "Wily Stage 1": RegionData({
+        names.wily_1_boss: LocationData(0x000D),
+        names.wily_1_c1: LocationData(0x022C, energy=True),
+        names.wily_1_c2: LocationData(0x022D, oneup_tank=True),
+        names.wily_1_c3: LocationData(0x022E, energy=True),
+        names.wily_1_c4: LocationData(0x022E, energy=True),
+        names.wily_1_c5: LocationData(0x022E, energy=True),
+        names.wily_1_c6: LocationData(0x022E, energy=True),
+        names.wily_1_c7: LocationData(0x022E, energy=True),
+        names.wily_1_c8: LocationData(0x022E, energy=True),
+        names.wily_1_c9: LocationData(0x022E, energy=True),
+        names.wily_1_c10: LocationData(0x022E, energy=True),
+        names.wily_1_c11: LocationData(0x022E, energy=True),
+        names.wily_1_c12: LocationData(0x022E, energy=True),
+        names.wily_1_c13: LocationData(0x022E, energy=True),
+        names.wily_1_c14: LocationData(0x022E, energy=True),
+        names.wily_1_c15: LocationData(0x022E, energy=True),
+        names.wily_1_c16: LocationData(0x022E, energy=True),
+        names.wily_1_c17: LocationData(0x022E, energy=True),
+        names.wily_1_c18: LocationData(0x022E, energy=True),
+    }, [], [names.mr_x_1_boss, names.mr_x_2_boss,
+            names.mr_x_3_boss, names.mr_x_4_boss,]),#should we preface this with rush jet?
+
+    "Wily Stage 2": RegionData({
+        names.wily_2_boss: LocationData(0x000E),
+        names.wily_2_c1: LocationData(0x022F, oneup_tank=True),
+        names.wily_2_c2: LocationData(0x0230, oneup_tank=True),
+        names.wily_2_c3: LocationData(0x0231, energy=True),
+        names.wily_2_c4: LocationData(0x0232, energy=True),
+        names.wily_2_c5: LocationData(0x0232, energy=True),
+    }, [], [names.wily_1_boss], parent="Wily Stage 1"),
+
+    "Wily Stage 3": RegionData({
+        names.wily_3_boss: LocationData(0x000F),
+        names.wily_3_c1: LocationData(0x0233, energy=True),
+        names.wily_3_c2: LocationData(0x0234, oneup_tank=True),
+        names.wily_3_c3: LocationData(0x0234, energy=True),
+        names.wily_3_c4: LocationData(0x0234, energy=True),
+        names.wily_3_c5: LocationData(0x0234, energy=True),
+                
+
+    }, [], [names.wily_2_boss], parent="Wily Stage 2"),
+
+    "Wily Stage 4": RegionData({
+        names.wily_4_boss: LocationData(None),
+        names.wily_4_c1: LocationData(0x0233, energy=True),
+        #names.wily_4_c2: LocationData(0x0234, eddie=True),
+    }, [], [names.wily_3_boss], parent="Wily Stage 3"),
+}
+
+
+def get_boss_locations(region: str) -> list[str]:
+    return [location for location, data in mm6_regions[region].locations.items()
+            if not data.energy and not data.oneup_tank]
+
+
+def get_energy_locations(region: str) -> list[str]:
+    return [location for location, data in mm6_regions[region].locations.items() if data.energy]
+
+
+def get_oneup_locations(region: str) -> list[str]:
+    return [location for location, data in mm6_regions[region].locations.items() if data.oneup_tank]
+
+
+location_table: dict[str, int | None] = {
+    location: data.location_id for region in mm6_regions.values() for location, data in region.locations.items()
+}
+
+
+location_groups = {
+    "Get Equipped": {
+        names.get_yamato_spear,
+        names.get_knight_crusher,
+        names.get_centaur_flash,
+        names.get_wind_storm,
+        names.get_flame_blast,
+        names.get_blizzard_attack,
+        names.get_plant_barrier,
+        names.get_silver_tomahawk,
+        names.get_rush_jet_adapter,
+        names.get_rush_power_adapter,
+        names.get_beat_b,
+        names.get_beat_e,
+        names.get_beat_a,
+        names.get_beat_t,
+    },
+    **{name: {location for location, data in region.locations.items() if data.location_id} for name, region in mm6_regions.items()
+       if name != "Wily Stage 4"}
+}
+
+lookup_location_to_id: dict[str, int] = {location: idx for location, idx in location_table.items() if idx is not None}
