@@ -13,14 +13,14 @@ if TYPE_CHECKING:
     from . import MM6World
 
 bosses: dict[str, int] = {
-    "Yamato Man": 0,
-    "Knight Man": 1,
-    "Centaur Man": 2,
-    "Wind Man": 3,
-    "Flame Man": 4,
-    "Blizzard Man": 5,
-    "Plant Man": 6,
-    "Tomahawk Man": 7,
+    "Blizzard Man": 0,
+    "Centaur Man": 1,
+    "Flame Man": 2,
+    "Knight Man": 3,
+    "Plant Man": 4,
+    "Tomahawk Man": 5,
+    "Wind Man": 6,
+    "Yamato Man": 7,
     "Rounder II": 8,
     "Power Piston": 9,
     "Metonger Z": 10,
@@ -32,14 +32,14 @@ bosses: dict[str, int] = {
 
 weapons_to_id: dict[str, int] = {
     "Mega Buster": 0,
-    names.yamato_spear: 1,
-    names.knight_crusher: 2,
-    names.centaur_flash: 3,
-    names.wind_storm: 4,
-    names.flame_blast: 5,
-    names.blizzard_attack: 6,
-    names.plant_barrier: 7,
-    names.silver_tomahawk: 8,
+    names.blizzard_attack: 1,
+    names.centaur_flash: 2,
+    names.flame_blast: 3,
+    names.knight_crusher: 4,
+    names.plant_barrier: 5,
+    names.silver_tomahawk: 6,
+    names.wind_storm: 7,
+    names.yamato_spear: 8,
     names.rush_jet: 9,
     names.rush_power: 10,
     names.rush_power_partial: 11,
@@ -49,14 +49,14 @@ weapons_to_id: dict[str, int] = {
 
 weapon_damage: dict[int, list[int]] = {
     0: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Mega Buster
-    1: [1, 4, 1, 1, 1, 1, 1, 1, 2, 2, 1, 1, 4, 2, 1, ],  # Yamato Spear
-    2: [1, 1, 4, 1, 1, 1, 1, 1, 3, 2, 1, 1, 1, 1, 2, ],  # Knight Crusher
-    3: [0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ],  # Centaur Flash
-    4: [1, 1, 1, 1, 4, 1, 1, 1, 2, 1, 1, 1, 1, 4, 1, ],  # Wind Storm
-    5: [1, 1, 1, 1, 1, 4, 2, 1, 4, 1, 1, 4, 1, 1, 1, ],  # Flame Blast
-    6: [1, 1, 1, 1, 1, 1, 4, 1, 2, 1, 3, 1, 1, 1, 1, ],  # Blizzard Attack
-    7: [0, 0, 0, 0, 0, 0, 0, 4, 4, 1, 1, 1, 1, 1, 1, ],  # Plant Barrier
-    8: [4, 1, 1, 1, 1, 1, 1, 1, 3, 3, 1, 1, 1, 1, 4, ],  # Silver Tomahawk
+    1: [1, 1, 1, 1, 4, 1, 1, 1, 2, 1, 3, 1, 1, 1, 1, ],  # Blizzard Attack
+    2: [0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, ],  # Centaur Flash
+    3: [4, 1, 1, 1, 2, 1, 1, 1, 4, 1, 1, 4, 1, 1, 1, ],  # Flame Blast
+    4: [1, 4, 1, 1, 1, 1, 1, 1, 3, 2, 1, 1, 1, 1, 2, ],  # Knight Crusher
+    5: [0, 0, 0, 0, 0, 4, 0, 0, 4, 1, 1, 1, 1, 1, 1, ],  # Plant Barrier
+    6: [1, 1, 1, 1, 1, 1, 1, 4, 3, 3, 1, 1, 1, 1, 4, ],  # Silver Tomahawk
+    7: [1, 1, 4, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 4, 1, ],  # Wind Storm
+    8: [1, 1, 1, 4, 1, 1, 1, 1, 2, 2, 1, 1, 4, 2, 1, ],  # Yamato Spear
     9: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ],  # Rush Jet Adapter
     10: [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, ],  # Rush Power Adapter
     11: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ],  # Rush Power Adapter Partially Charged
@@ -65,14 +65,14 @@ weapon_damage: dict[int, list[int]] = {
 }
 
 weapons_to_name: dict[int, str] = {
-    1:names.yamato_spear,
-    2:names.knight_crusher,
-    3:names.centaur_flash,
-    4:names.wind_storm,
-    5:names.flame_blast,
-    6:names.blizzard_attack,
-    7:names.plant_barrier,
-    8:names.silver_tomahawk,
+    1:names.blizzard_attack,
+    2:names.centaur_flash,
+    3:names.flame_blast,
+    4:names.knight_crusher,
+    5:names.plant_barrier,
+    6:names.silver_tomahawk,
+    7:names.wind_storm,
+    8:names.yamato_spear,
     9:names.rush_jet,
     10:names.rush_power,
     11:names.rush_power_partial,
@@ -97,14 +97,14 @@ minimum_weakness_requirement: dict[int, int] = {
 }
 
 robot_masters: dict[int, str] = {
-    0: "Yamato Man Defeated",
-    1: "Knight Man Defeated",
-    2: "Centaur Man Defeated",
-    3: "Wind Man Defeated",
-    4: "Flame Man Defeated",
-    5: "Blizzard Man Defeated",
-    6: "Plant Man Defeated",
-    7: "Tomahawk Man Defeated"
+    0: "Blizzard Man Defeated",
+    1: "Centaur Man Defeated",
+    2: "Flame Man Defeated",
+    3: "Knight Man Defeated",
+    4: "Plant Man Defeated",
+    5: "Tomahawk Man Defeated",
+    6: "Wind Man Defeated",
+    7: "Yamato Man Defeated"
 }
 
 weapon_costs = {

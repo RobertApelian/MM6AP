@@ -1,10 +1,6 @@
 from BaseClasses import Item
 from typing import NamedTuple
-from .names import (gravity_hold, water_wave, power_stone, gyro_attack, star_crash, charge_kick, napalm_bomb,
-                    crystal_eye, rush_coil, rush_jet, super_arrow, beat, charge_buster,
-                    gravity_man_stage, wave_man_stage, stone_man_stage, gyro_man_stage, star_man_stage,
-                    charge_man_stage, napalm_man_stage, crystal_man_stage, proto_man_1_stage, proto_man_2_stage, proto_man_3_stage,
-                    proto_man_4_stage, e_tank, weapon_energy, health_energy, one_up)
+from .names import (yamato_spear, knight_crusher, centaur_flash, wind_storm, flame_blast, blizzard_attack, plant_barrier, silver_tomahawk, rush_power_adapter, rush_jet_adapter, beat_b, beat_e, beat_a, beat_t, charge_buster, yamato_man_stage, knight_man_stage, centaur_man_stage, wind_man_stage, flame_man_stage, blizzard_man_stage, plant_man_stage, tomahawk_man_stage, mr_x_1_stage, mr_x_2_stage, mr_x_3_stage, mr_x_4_stage, one_up, weapon_energy, health_energy, e_tank )
 #TODO: ALL NAMES HERE
 
 class ItemData(NamedTuple):
@@ -19,25 +15,25 @@ class MM6Item(Item):
 
 
 robot_master_weapon_table = {
-    yamato_spear: ItemData(0x0001, True,True),
-    knight_crusher: ItemData(0x0002, True),
-    centaur_flash: ItemData(0x0003, True),
-    wind_storm: ItemData(0x0004, True),
-    flame_blast: ItemData(0x0005, True),
-    blizzard_attack: ItemData(0x0006, True),
-    plant_barrier: ItemData(0x0007, True),
-    silver_tomahawk: ItemData(0x0008, True),
+    blizzard_attack: ItemData(0x0001, True),
+    centaur_flash: ItemData(0x0002, True),
+    flame_blast: ItemData(0x0003, True),
+    knight_crusher: ItemData(0x0004, True),
+    plant_barrier: ItemData(0x0005, True),
+    silver_tomahawk: ItemData(0x0006, True),
+    wind_storm: ItemData(0x0007, True),
+    yamato_spear: ItemData(0x0008, True),
 }
 
 stage_access_table = {
-    yamato_man_stage: ItemData(0x0101, True),
-    knight_man_stage: ItemData(0x0102, True),
-    centaur_man_stage: ItemData(0x0103, True),
-    wind_man_stage: ItemData(0x0104, True),
-    flame_man_stage: ItemData(0x0105, True),
-    blizzard_man_stage: ItemData(0x0106, True),
-    plant_man_stage: ItemData(0x0107, True),
-    tomahawk_man_stage: ItemData(0x0108, True),
+    blizzard_man_stage: ItemData(0x0101, True),
+    centaur_man_stage: ItemData(0x0102, True),
+    flame_man_stage: ItemData(0x0103, True),
+    knight_man_stage: ItemData(0x0104, True),
+    plant_man_stage: ItemData(0x0105, True),
+    tomahawk_man_stage: ItemData(0x0106, True),
+    wind_man_stage: ItemData(0x0107, True),
+    yamato_man_stage: ItemData(0x0108, True),
     mr_x_1_stage: ItemData(0x0110, True, True),
     mr_x_2_stage: ItemData(0x0111, True, True),
     mr_x_3_stage: ItemData(0x0112, True, True),

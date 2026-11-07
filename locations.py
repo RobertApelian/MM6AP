@@ -3,11 +3,11 @@ from typing import NamedTuple
 from . import names
 
 
-class MM5Location(Location):
+class MM6Location(Location):
     game = "Mega Man 6"
 
 
-class MM5Region(Region):
+class MM6Region(Region):
     game = "Mega Man 6"
 
 
