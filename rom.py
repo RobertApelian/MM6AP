@@ -11,12 +11,12 @@ from .rules import bosses
 from .options import MusicShuffle
 
 if TYPE_CHECKING:
-    from . import MM5World
+    from . import MM6World
 
-MM5LCHASH = "0292adc9e38e77687f5d09718a768b45"
+MM6LCHASH = "0292adc9e38e77687f5d09718a768b45"
 PROTEUSHASH = "0292adc9e38e77687f5d09718a768b45"
-MM5NESHASH = "4482fbbbc77e03266b979f5028d4b51d"
-MM5VCHASH = "8453ea3f3096412bff739d48aa386146"
+MM6NESHASH = "4482fbbbc77e03266b979f5028d4b51d"
+MM6VCHASH = "8453ea3f3096412bff739d48aa386146"
 
 ENERGYLINK = 0x3AA90
 WILY3REQ = 0x163D0
@@ -110,14 +110,14 @@ enemy_weakness_ptrs: dict[int, int] = {
 }
 
 
-class MM5ProcedurePatch(APProcedurePatch, APTokenMixin):
-    hash = [MM5LCHASH, MM5NESHASH, MM5VCHASH]
-    game = "Mega Man 5"
-    patch_file_ending = ".apmm5"
+class MM6ProcedurePatch(APProcedurePatch, APTokenMixin):
+    hash = [MM6LCHASH, MM6NESHASH, MM6VCHASH]
+    game = "Mega Man 6"
+    patch_file_ending = ".apmm6"
     result_file_ending = ".nes"
     name: bytearray
     procedure = [
-        ("apply_bsdiff4", ["mm5_basepatch.bsdiff4"]),
+        ("apply_bsdiff4", ["mm6_basepatch.bsdiff4"]),
         ("apply_tokens", ["token_patch.bin"]),
     ]
 
@@ -132,8 +132,8 @@ class MM5ProcedurePatch(APProcedurePatch, APTokenMixin):
         self.write_token(APTokenTypes.WRITE, offset, bytes(value))
 
 
-def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
-    patch.write_file("mm5_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm5_basepatch.bsdiff4")))
+def patch_rom(world: "MM6World", patch: MM6ProcedurePatch) -> None:
+    patch.write_file("mm6_basepatch.bsdiff4", pkgutil.get_data(__name__, os.path.join("data", "mm6_basepatch.bsdiff4")))
 
     enemy_weaknesses: dict[str, dict[int, int]] = {}
 
@@ -209,7 +209,7 @@ def patch_rom(world: "MM5World", patch: MM5ProcedurePatch) -> None:
 
 
     from Utils import __version__
-    patch.name = bytearray(f'MM5{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
+    patch.name = bytearray(f'MM6{__version__.replace(".", "")[0:3]}_{world.player}_{world.multiworld.seed:11}\0',
                            'utf8')[:21]
     patch.name.extend([0] * (21 - len(patch.name)))
     patch.write_bytes(0x3FDA0, patch.name)
@@ -256,13 +256,13 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
         basemd5 = hashlib.md5()
         basemd5.update(base_rom_bytes)
         if basemd5.hexdigest() == PROTEUSHASH:
-            base_rom_bytes = extract_mm5(base_rom_bytes)
+            base_rom_bytes = extract_mm6(base_rom_bytes)
             basemd5 = hashlib.md5()
             basemd5.update(base_rom_bytes)
-        if basemd5.hexdigest() not in {MM5LCHASH, MM5NESHASH, MM5VCHASH}:
+        if basemd5.hexdigest() not in {MM6LCHASH, MM6NESHASH, MM6VCHASH}:
             print(basemd5.hexdigest())
             if basemd5.hexdigest() == "ab9ad69f29f812cb520dd49b39805491":
-                raise Exception("Supplied Base Rom is a Rev 1 copy of Mega Man 5. Please contact the developer to "
+                raise Exception("Supplied Base Rom is a Rev 1 copy of Mega Man 6. Please contact the developer to "
                                 "add support for this version.")
             raise Exception("Supplied Base Rom does not match known MD5 for US, LC, or US VC release. "
                             "Get the correct game and version, then dump it")
@@ -274,9 +274,9 @@ def get_base_rom_bytes(file_name: str = "") -> bytes:
 
 
 def get_base_rom_path(file_name: str = "") -> str:
-    from . import MM5World
+    from . import MM6World
     if not file_name:
-        file_name = MM5World.settings.rom_file
+        file_name = MM6World.settings.rom_file
     if not os.path.exists(file_name):
         file_name = Utils.user_path(file_name)
     return file_name
@@ -286,6 +286,6 @@ prg_offset = 0x1AF230
 prg_size = 0x40000
 
 
-def extract_mm5(proteus: bytes) -> bytes:
-    mm5 = bytearray(proteus[prg_offset:prg_offset + prg_size])
-    return bytes(mm5)
+def extract_mm6(proteus: bytes) -> bytes:
+    mm6 = bytearray(proteus[prg_offset:prg_offset + prg_size])
+    return bytes(mm6)

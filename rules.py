@@ -5,7 +5,7 @@ from typing_extensions import override
 from BaseClasses import CollectionState
 from NetUtils import JSONMessagePart
 from . import names
-from .locations import get_boss_locations, mm5_regions
+from .locations import get_boss_locations, mm6_regions
 from rule_builder.rules import CanReachLocation, HasAll, HasAny, Has, OptionFilter, Rule, True_, TWorld
 
 
@@ -79,7 +79,7 @@ weapons_to_name: dict[int, str] = {
     12:names.rush_power_charged,
     13:names.beat,
 }
-#TODO: leftoff here
+#TODO: update this
 minimum_weakness_requirement: dict[int, int] = {
     0: 1,  # Mega Buster is free
     1: 4,  # 7 applications of Gravity Hold (Screen nuke)
@@ -109,25 +109,25 @@ robot_masters: dict[int, str] = {
 
 weapon_costs = {
     0: 0,
-    1: 4,
-    2: 2,
+    1: 3,
+    2: 4,
     3: 1,
     4: 1,
-    5: 2,
+    5: 4,
     6: 1,
     7: 1,
-    8: 1,
+    8: 0,
     9: 0,
     10: 0,
-    11: 2,
-    12: 2,
+    11: 0,
+    12: 3,
 }
 
 
 @dataclass
-class CanDefeatEnoughRBMs(Rule["MM5World"], game="Mega Man 5"):
+class CanDefeatEnoughRBMs(Rule["MM6World"], game="Mega Man 6"):
     @override
-    def _instantiate(self, world: "MM5World") -> Rule.Resolved:
+    def _instantiate(self, world: "MM6World") -> Rule.Resolved:
         return self.Resolved(tuple([(key, tuple(val)) for key, val in sorted(world.wily_3_weapons.items())]),
                              world.options.wily_3_requirement.value,
                              player=world.player, caching_enabled=True)
@@ -173,17 +173,17 @@ class CanDefeatEnoughRBMs(Rule["MM5World"], game="Mega Man 5"):
             return False
 
 
-HasRushCoil = Has(names.rush_coil)
 HasRushJet = Has(names.rush_jet)
-HasSuperArrow = Has(names.super_arrow)
-HasVertical = HasRushCoil | HasSuperArrow | HasRushJet
+HasRushPower = Has(names.rush_power_adapter)
+HasFlame = Has(names.flame_blast)
+HasCharge = Has(names.charge_buster)
 
 STATIC_LOCATION_RULES: dict[str, Rule] = {
-    names.proto_man_1_boss: HasVertical,
-    names.proto_man_2_boss: HasVertical,
-    names.proto_man_3_boss: HasVertical,
-    names.wily_1_boss: HasVertical,
-    names.wily_2_boss: HasRushJet | HasSuperArrow,
+    names.flame_man: HasRushJet | HasCharge,
+    mr_x_1_boss: HasRushJet,
+    mr_x_2_boss: HasRushJet,
+    mr_x_3_boss: HasRushJet,
+    wily_1_boss: HasRushJet,
 }
 
 STATIC_ENTRANCE_RULES: dict[str, Rule] = {
@@ -192,32 +192,110 @@ STATIC_ENTRANCE_RULES: dict[str, Rule] = {
 }
 
 STATIC_1UP_RULES: dict[str, Rule] = {
-    names.stone_man_c4:HasVertical,
-    names.crystal_man_c3:HasVertical,
-    names.proto_man_2_c1:HasVertical,
-    names.proto_man_2_c5:HasVertical,
-    names.wily_3_c1:HasVertical,
-    names.wily_3_c2:HasVertical,
+    yamato_man_c1: HasRushJet,
+    yamato_man_c3: HasRushPower,
+    knight_man_c1: HasRushPower,
+    knight_man_c5: HasRushJet,
+    wind_man_c7: HasRushJet,
+    flame_man_c6: HasRushJet | HasCharge,
+    blizzard_man_c2: HasFlame,
+    blizzard_man_c4: HasRushPower,
+    blizzard_man_c5: HasFlame,
+    blizzard_man_c10: HasRushPower,
+    plant_man_c2: HasRushPower,
+    tomahawk_man_c2: HasRushPower,
+    tomahawk_man_c7: HasRushJet,
+    mr_x_1_c1: HasRushJet & HasRushPower,
+    mr_x_1_c11: HasRushJet & HasRushPower,
+    mr_x_1_c12: HasRushJet & HasRushPower,
+    mr_x_1_c13: HasRushJet & HasRushPower,
+    mr_x_1_c14: HasRushJet & HasRushPower,
+    mr_x_3_c1: HasRushPower, 
+    mr_x_3_c4: HasRushJet & HasRushPower,
+    mr_x_4_c11: HasRushPower,
+    mr_x_4_c15: HasRushJet,
+    wily_1_c1: HasRushPower,
+    wily_1_c3: HasRushJet & HasRushPower,
+    wily_2_c1: HasRushPower,
 }
 
 STATIC_ENERGY_RULES: dict[str, Rule] = {
-    names.gravity_man_c1: HasVertical,
-    names.proto_man_1_c1:HasVertical,
-    names.proto_man_1_c2:HasVertical,
-    names.proto_man_1_c4:HasVertical,
-    names.proto_man_1_c5:HasVertical,
-    names.proto_man_2_c2:HasVertical,
-    names.proto_man_3_c1:HasVertical,
-    names.wily_1_c3:HasVertical,
+    yamato_man_c2: HasRushPower,
+    yamato_man_c4: HasRushJet,
+    wind_man_c1: HasRushPower,
+    wind_man_c3: HasRushJet,
+    wind_man_c4: HasRushJet,
+    wind_man_c5: HasRushJet,
+    wind_man_c6: HasRushJet,
+    wind_man_c10: HasRushJet,
+    wind_man_c11: HasRushJet,
+    flame_man_c2: HasRushJet | HasRushPower,
+    flame_man_c4: HasRushJet,
+    flame_man_c5: HasRushJet | HasCharge,
+    blizzard_man_c1: HasRushJet,
+    blizzard_man_c6: HasRushPower,
+    blizzard_man_c7: HasRushPower,
+    blizzard_man_c8: HasRushPower,
+    blizzard_man_c9: HasRushPower,
+    plant_man_c1: HasRushPower,
+    plant_man_c8: HasRushPower,
+    plant_man_c9: HasRushPower,
+    plant_man_c17: HasRushJet,
+    plant_man_c19: HasRushJet,
+    plant_man_c20: HasRushJet,
+    tomahawk_man_c1: HasRushPower,
+    tomahawk_man_c6: HasRushJet,
+    tomahawk_man_c8: HasRushJet,
+    tomahawk_man_c10: HasRushJet,
+    mr_x_1_c2: HasRushJet & HasRushPower,
+    mr_x_1_c3: HasRushJet & HasRushPower,
+    mr_x_1_c4: HasRushJet & HasRushPower,
+    mr_x_1_c5: HasRushJet & HasRushPower,
+    mr_x_1_c6: HasRushJet & HasRushPower,
+    mr_x_1_c7: HasRushJet & HasRushPower,
+    mr_x_1_c8: HasRushJet & HasRushPower,
+    mr_x_1_c9: HasRushJet & HasRushPower,
+    mr_x_1_c10: HasRushJet & HasRushPower,
+    mr_x_3_c3: HasRushJet & HasRushPower,
+    mr_x_3_c5: HasRushJet & HasRushPower,
+    mr_x_3_c6: HasRushJet & HasRushPower,
+    mr_x_3_c7: HasRushJet & HasRushPower,
+    mr_x_4_c2: HasRushPower,
+    mr_x_4_c3: HasRushPower,
+    mr_x_4_c4: HasRushPower,
+    mr_x_4_c5: HasRushPower,
+    mr_x_4_c12: HasRushPower,
+    mr_x_4_c13: HasRushPower,
+    mr_x_4_c14: HasRushPower,
+    wily_1_c4: HasRushJet & HasRushPower,
+    wily_1_c5: HasRushJet & HasRushPower,
+    wily_1_c6: HasRushJet & HasRushPower,
+    wily_1_c7: HasRushJet & HasRushPower,
+    wily_1_c8: HasRushJet & HasRushPower,
+    wily_1_c9: HasRushJet & HasRushPower,
+    wily_1_c10: HasRushJet & HasRushPower,
+    wily_1_c11: HasRushJet & HasRushPower,
+    wily_1_c12: HasRushJet & HasRushPower,
+    wily_1_c13: HasRushJet & HasRushPower,
+    wily_1_c14: HasRushJet & HasRushPower,
+    wily_1_c15: HasRushJet,
+    wily_1_c16: HasRushJet,
+    wily_1_c17: HasRushJet,
+    wily_1_c18: HasRushJet,
+    wily_1_c19: HasRushJet,
+    wily_2_c1: HasRushPower,
 }
 
+STATIC_OTHER_RULES: dict[str, Rule] = {#do we need a separate dict for this? in case have to incorporate this in the code
+    tomahawk_man_c9: HasRushPower,
+}
 
-def set_rules(world: "MM5World") -> None:
+def set_rules(world: "MM6World") -> None:
     from .options import RandomWeaknesses
     # most rules are set on region, so we only worry about rules required within stage access
     # or rules variable on settings
     if hasattr(world.multiworld, "re_gen_passthrough"):
-        slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 5"]
+        slot_data = getattr(world.multiworld, "re_gen_passthrough")["Mega Man 6"]
         world.weapon_damage = slot_data["weapon_damage"]
     else:
         if world.options.random_weakness == world.options.random_weakness.option_shuffled:
@@ -430,7 +508,7 @@ def set_rules(world: "MM5World") -> None:
             location_rules[location] = STATIC_LOCATION_RULES[location]
 
     # Handle entrance rules
-    for region, info in mm5_regions.items():
+    for region, info in mm6_regions.items():
         entrance = world.get_entrance(f"To {region}")
         static_rule = STATIC_ENTRANCE_RULES.get(entrance.name, True_())
         location_rule = True_()

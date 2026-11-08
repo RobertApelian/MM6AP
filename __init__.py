@@ -6,29 +6,29 @@ from typing import Any, Sequence, ClassVar
 from BaseClasses import Tutorial, ItemClassification, MultiWorld, Item, Location
 from worlds.AutoWorld import World, WebWorld
 from .color import check_for_known_worlds
-from .items import (item_table, item_names, MM5Item, filler_item_weights, robot_master_weapon_table,
+from .items import (item_table, item_names, MM6Item, filler_item_weights, robot_master_weapon_table,
                     stage_access_table, extra_item_table, lookup_item_to_id)
-from .locations import (MM5Location, mm5_regions, MM5Region, lookup_location_to_id,
+from .locations import (MM6Location, mm6_regions, MM6Region, lookup_location_to_id,
                         location_groups)
 from .names import (wily_4_boss, charge_buster, gravity_man_stage, wave_man_stage, stone_man_stage, gyro_man_stage,
                     star_man_stage, charge_man_stage, napalm_man_stage, crystal_man_stage)
-from .rom import patch_rom, MM5ProcedurePatch, MM5LCHASH, MM5VCHASH, PROTEUSHASH, MM5NESHASH
-from .options import MM5Options, Consumables
+from .rom import patch_rom, MM6ProcedurePatch, MM6LCHASH, MM6VCHASH, PROTEUSHASH, MM6NESHASH
+from .options import MM6Options, Consumables
 from .client import MegaMan5Client
 from .rules import set_rules, weapon_damage, robot_masters, weapons_to_name, minimum_weakness_requirement
 import os
 import threading
 import base64
 import settings
-logger = logging.getLogger("Mega Man 5")
+logger = logging.getLogger("Mega Man 6")
 
 
-class MM5Settings(settings.Group):
+class MM6Settings(settings.Group):
     class RomFile(settings.UserFilePath):
-        """File name of the MM5 EN rom"""
-        description = "Mega Man 5 ROM File"
-        copy_to: str | None = "Mega Man 5 (USA).nes"
-        md5s = [MM5NESHASH, MM5LCHASH, PROTEUSHASH, MM5VCHASH]
+        """File name of the MM6 EN rom"""
+        description = "Mega Man 6 ROM File"
+        copy_to: str | None = "Mega Man 6 (USA).nes"
+        md5s = [MM6NESHASH, MM6LCHASH, PROTEUSHASH, MM6VCHASH]
 
         def browse(self: settings.T,
                    filetypes: Sequence[tuple[str, Sequence[str]]] | None = None,
@@ -62,13 +62,13 @@ class MM5Settings(settings.Group):
     rom_file: RomFile = RomFile(RomFile.copy_to)
 
 
-class MM5WebWorld(WebWorld):
+class MM6WebWorld(WebWorld):
     theme = "partyTime"
     tutorials = [
 
         Tutorial(
            "Multiworld Setup Guide",
-           "A guide to setting up the Mega Man 5 randomizer connected to an Archipelago Multiworld.",
+           "A guide to setting up the Mega Man 6 randomizer connected to an Archipelago Multiworld.",
            "English",
            "setup_en.md",
            "setup/en",
@@ -77,21 +77,21 @@ class MM5WebWorld(WebWorld):
     ]
 
 
-class MM5World(World):
+class MM6World(World):
     """
     The world is at trouble once again! This time however, your target is...Protoman?!. 
     And he kidnapped Dr.Light! Time to gear up once again to save the doctor and find the truth.
     """
 
-    game = "Mega Man 5"
-    settings: ClassVar[MM5Settings]
-    options_dataclass = MM5Options
-    options: MM5Options
+    game = "Mega Man 6"
+    settings: ClassVar[MM6Settings]
+    options_dataclass = MM6Options
+    options: MM6Options
     item_name_to_id = lookup_item_to_id
     location_name_to_id = lookup_location_to_id
     item_name_groups = item_names
     location_name_groups = location_groups
-    web = MM5WebWorld()
+    web = MM6WebWorld()
     rom_name: bytearray
 
     def __init__(self, multiworld: MultiWorld, player: int):
@@ -102,11 +102,11 @@ class MM5World(World):
         self.wily_4_weapons: dict[int, list[int]] = {}
 
     def create_regions(self) -> None:
-        menu = MM5Region("Menu", self.player, self.multiworld)
+        menu = MM6Region("Menu", self.player, self.multiworld)
         self.multiworld.regions.append(menu)
-        location: MM5Location
-        for name, region in mm5_regions.items():
-            stage = MM5Region(name, self.player, self.multiworld)
+        location: MM6Location
+        for name, region in mm6_regions.items():
+            stage = MM6Region(name, self.player, self.multiworld)
             if not region.parent:
                 menu.connect(stage, f"To {name}")
             else:
@@ -117,10 +117,10 @@ class MM5World(World):
                                  and (not data.oneup_tank or self.options.consumables.value in (Consumables.option_1up_etank, Consumables.option_all))})
             self.multiworld.regions.append(stage)
         goal_location = self.get_location(wily_4_boss)
-        goal_location.place_locked_item(MM5Item("Victory", ItemClassification.progression, None, self.player))
+        goal_location.place_locked_item(MM6Item("Victory", ItemClassification.progression, None, self.player))
         self.multiworld.completion_condition[self.player] = lambda state: state.has("Victory", self.player)
 
-    def create_item(self, name: str, force_non_progression: bool = False) -> MM5Item:
+    def create_item(self, name: str, force_non_progression: bool = False) -> MM6Item:
         item = item_table[name]
         classification = ItemClassification.filler
         if item.progression and not force_non_progression:
@@ -128,7 +128,7 @@ class MM5World(World):
                 if item.skip_balancing else ItemClassification.progression
         if item.useful:
             classification |= ItemClassification.useful
-        return MM5Item(name, classification, item.code, self.player)
+        return MM6Item(name, classification, item.code, self.player)
 
     def get_filler_item_name(self) -> str:
         return self.random.choices(list(filler_item_weights.keys()),
@@ -217,7 +217,7 @@ class MM5World(World):
 
     def generate_output(self, output_directory: str) -> None:
         try:
-            patch = MM5ProcedurePatch(player=self.player, player_name=self.player_name)
+            patch = MM6ProcedurePatch(player=self.player, player_name=self.player_name)
             patch_rom(self, patch)
 
             self.rom_name = patch.name

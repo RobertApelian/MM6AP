@@ -6,8 +6,8 @@ import struct
 import logging
 
 if TYPE_CHECKING:
-    from . import MM5World
-    from .rom import MM5ProcedurePatch
+    from . import MM6World
+    from .rom import MM6ProcedurePatch
 
 HTML_TO_NES: dict[str, int] = {
     'SNOW': 0x20,
@@ -57,7 +57,7 @@ HTML_TO_NES: dict[str, int] = {
     # can add more as needed
 }
 
-MM5_COLORS: dict[str, tuple[int, int]] = {
+MM6_COLORS: dict[str, tuple[int, int]] = {
     names.gravity_hold: (0x20, 0x14),
     names.water_wave: (0x20, 0x29),
     names.power_stone: (0x10, 0x16),
@@ -85,8 +85,8 @@ MM5_COLORS: dict[str, tuple[int, int]] = {
     names.proto_man_4_stage: (0x10, 0x16),
 }
 
-MM5_KNOWN_COLORS: dict[str, tuple[int, int]] = {
-    **MM5_COLORS,
+MM6_KNOWN_COLORS: dict[str, tuple[int, int]] = {
+    **MM6_COLORS,
     # Metroid series
     "Varia Suit": (0x27, 0x16),
     "Gravity Suit": (0x14, 0x16),
@@ -170,36 +170,36 @@ def check_for_known_worlds():
     if "worlds.mm1" in sys.modules:
         try:
             mm1 = sys.modules["worlds.mm1"]
-            MM5_KNOWN_COLORS.update(mm1.color.MM1_COLORS)
-            for item in MM5_COLORS:
-                mm1.color.add_color_to_mm1(item, MM5_COLORS[item])
+            MM6_KNOWN_COLORS.update(mm1.color.MM1_COLORS)
+            for item in MM6_COLORS:
+                mm1.color.add_color_to_mm1(item, MM6_COLORS[item])
         except AttributeError:
             pass
     if "worlds.mm2" in sys.modules:
         try:
             mm2 = sys.modules["worlds.mm2"]
-            MM5_KNOWN_COLORS.update(mm2.color.MM2_COLORS)
-            for item in MM5_COLORS:
-                mm2.color.add_color_to_mm2(item, MM5_COLORS[item])
+            MM6_KNOWN_COLORS.update(mm2.color.MM2_COLORS)
+            for item in MM6_COLORS:
+                mm2.color.add_color_to_mm2(item, MM6_COLORS[item])
         except AttributeError:
             # pass through if an old MM2 is found
             pass
     if "worlds.mm3" in sys.modules:
         try:
             mm3 = sys.modules["worlds.mm3"]
-            MM5_KNOWN_COLORS.update(mm3.color.MM3_COLORS)
-            for item in MM5_COLORS:
-                mm3.color.add_color_to_mm3(item, MM5_COLORS[item])
+            MM6_KNOWN_COLORS.update(mm3.color.MM3_COLORS)
+            for item in MM6_COLORS:
+                mm3.color.add_color_to_mm3(item, MM6_COLORS[item])
         except AttributeError:
             pass
 
 
-def add_color_to_mm5(name: str, color: tuple[int, int]) -> None:
+def add_color_to_mm6(name: str, color: tuple[int, int]) -> None:
     """
     Add a color combo for Mega Man 3 to recognize as the color to display for a given item.
     For information on available colors: https://www.nesdev.org/wiki/PPU_palettes#2C02
     """
-    MM5_KNOWN_COLORS[name] = validate_colors(*color)
+    MM6_KNOWN_COLORS[name] = validate_colors(*color)
 
 
 def extrapolate_color(color: int) -> tuple[int, int]:
@@ -250,8 +250,8 @@ def expand_colors(color_1: int, color_2: int) -> tuple[tuple[int, int, int], tup
 
 
 def get_colors_for_item(name: str) -> tuple[tuple[int, int, int], tuple[int, int, int]]:
-    if name in MM5_KNOWN_COLORS:
-        return expand_colors(*MM5_KNOWN_COLORS[name])
+    if name in MM6_KNOWN_COLORS:
+        return expand_colors(*MM6_KNOWN_COLORS[name])
 
     check_colors = {color: color in name.upper().replace(" ", '') for color in HTML_TO_NES}
     colors = [color for color in check_colors if check_colors[color]]
@@ -299,7 +299,7 @@ def parse_color(colors: list[str]) -> tuple[int, int]:
     return color_1, color_2
 
 
-def write_palette_shuffle(world: "MM5World", rom: "MM5ProcedurePatch") -> None:
+def write_palette_shuffle(world: "MM6World", rom: "MM6ProcedurePatch") -> None:
     palette_shuffle: int | str = world.options.palette_shuffle.value
     palettes_to_write: dict[str, tuple[int, int]] = {}
     if isinstance(palette_shuffle, str):
@@ -339,7 +339,7 @@ def write_palette_shuffle(world: "MM5World", rom: "MM5ProcedurePatch") -> None:
                         real_colors = validate_colors(world.random.randint(0, 0x3F), world.random.randint(0, 0x3F))
                         palettes_to_write[character] = real_colors
         else:
-            shuffled_colors = list(MM5_COLORS.values())[:-4]  # don't need cossack colors
+            shuffled_colors = list(MM6_COLORS.values())[:-4]  # don't need cossack colors
             shuffled_colors.append((0x2C, 0x11))  # Mega Buster
             world.random.shuffle(shuffled_colors)
             for character in palette_pointers:

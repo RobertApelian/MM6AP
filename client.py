@@ -12,17 +12,17 @@ if TYPE_CHECKING:
 nes_logger = logging.getLogger("NES")
 logger = logging.getLogger("Client")
 
-MM5_CURRENT_STAGE = 0x26
-MM5_MEGAMAN_STATE = 0x30
-MM5_MEGAMAN_SPIKE = 0x36
-MM5_LIVES = 0xBF
-MM5_E_TANKS = 0xBD
-MM5_M_TANKS = 0xBE
-MM5_ROBOT_MASTERS_DEFEATED = 0x6E
-MM5_CASTLE_STATUS = 0xAA
-MM5_HEALTH = 0xB0
-MM5_WEAPON_ENERGY = 0xB1
-MM5_WEAPONS = {
+MM6_CURRENT_STAGE = 0x26
+MM6_MEGAMAN_STATE = 0x30
+MM6_MEGAMAN_SPIKE = 0x36
+MM6_LIVES = 0xBF
+MM6_E_TANKS = 0xBD
+MM6_M_TANKS = 0xBE
+MM6_ROBOT_MASTERS_DEFEATED = 0x6E
+MM6_CASTLE_STATUS = 0xAA
+MM6_HEALTH = 0xB0
+MM6_WEAPON_ENERGY = 0xB1
+MM6_WEAPONS = {
     1: 6, # Gravity Hold
     2: 0, # Water Wave
     3: 5, # Power Stone
@@ -36,20 +36,20 @@ MM5_WEAPONS = {
     0x13: 4, # Super Arrow
     0x14: 0xB, # Beat
 }
-MM5_CONSUMABLES = 0x100
-MM5_ENERGY_BAR = 0x02D
-MM5_RECEIVED_ITEMS = 0x000
-MM5_ROBOT_MASTERS_UNLOCKED = 0x001
-MM5_PROTO_MAN_UNLOCKED = 0x002
-MM5_RBM_STROBE = 0x004
-MM5_SFX_QUEUE = 0x005
-MM5_ENERGYLINK_HEALTH = 0x007
-MM5_ENERGYLINK_WEAPON = 0x008
-MM5_ENERGYLINK_1UP = 0x009
-MM5_CHARGE_BUSTER = 0x00B
-MM5_SENT_WEAPONS = 0x0B1
+MM6_CONSUMABLES = 0x100
+MM6_ENERGY_BAR = 0x02D
+MM6_RECEIVED_ITEMS = 0x000
+MM6_ROBOT_MASTERS_UNLOCKED = 0x001
+MM6_PROTO_MAN_UNLOCKED = 0x002
+MM6_RBM_STROBE = 0x004
+MM6_SFX_QUEUE = 0x005
+MM6_ENERGYLINK_HEALTH = 0x007
+MM6_ENERGYLINK_WEAPON = 0x008
+MM6_ENERGYLINK_1UP = 0x009
+MM6_CHARGE_BUSTER = 0x00B
+MM6_SENT_WEAPONS = 0x0B1
 
-MM5_CONSUMABLE_TABLE: dict[int, dict[int, tuple[int, int]]] = {
+MM6_CONSUMABLE_TABLE: dict[int, dict[int, tuple[int, int]]] = {
     # Stage:
     #   Item: (byte offset, bit mask)
     0: {
@@ -148,7 +148,7 @@ def from_oneup_format(val: int) -> int:
     return ((val // 0x10) * 10) + val % 0x10
 
 
-class MM5EnergyLinkType(IntEnum):
+class MM6EnergyLinkType(IntEnum):
     Life = 0
     GravityHold = 1
     WaterWave = 2
@@ -186,7 +186,7 @@ HP_EXCHANGE_RATE = 500000000
 WEAPON_EXCHANGE_RATE = 250000000
 ONEUP_EXCHANGE_RATE = 14000000000
 
-MM5_ENERGYLINK_EXCHANGE_RATES: dict[int, int] = {
+MM6_ENERGYLINK_EXCHANGE_RATES: dict[int, int] = {
     0: HP_EXCHANGE_RATE,
     1: WEAPON_EXCHANGE_RATE,
     2: ONEUP_EXCHANGE_RATE,
@@ -195,8 +195,8 @@ MM5_ENERGYLINK_EXCHANGE_RATES: dict[int, int] = {
 
 def cmd_pool(self: "BizHawkClientCommandProcessor") -> None:
     """Check the current pool of EnergyLink, and requestable refills from it."""
-    if self.ctx.game != "Mega Man 5":
-        logger.warning("This command can only be used when playing Mega Man 5.")
+    if self.ctx.game != "Mega Man 6":
+        logger.warning("This command can only be used when playing Mega Man 6.")
         return
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command.")
@@ -213,27 +213,27 @@ def cmd_pool(self: "BizHawkClientCommandProcessor") -> None:
 def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str) -> None:
     """Request a refill from EnergyLink."""
     from worlds._bizhawk.context import BizHawkClientContext
-    if self.ctx.game != "Mega Man 5":
-        logger.warning("This command can only be used when playing Mega Man 5.")
+    if self.ctx.game != "Mega Man 6":
+        logger.warning("This command can only be used when playing Mega Man 6.")
         return
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command.")
         return
-    valid_targets: dict[str, MM5EnergyLinkType] = {
-        "HP": MM5EnergyLinkType.Life,
-        "GH": MM5EnergyLinkType.GravityHold,
-        "WW": MM5EnergyLinkType.WaterWave,
-        "PS": MM5EnergyLinkType.PowerStone,
-        "GA": MM5EnergyLinkType.GyroAttack,
-        "SC": MM5EnergyLinkType.StarCrash,
-        "CK": MM5EnergyLinkType.ChargeKick,
-        "NB": MM5EnergyLinkType.NapalmBomb,
-        "CE": MM5EnergyLinkType.CrystalEye,
-        "RC": MM5EnergyLinkType.RushCoil,
-        "RJ": MM5EnergyLinkType.RushJet,
-        "SA": MM5EnergyLinkType.SuperArrow,
-        "BE": MM5EnergyLinkType.Beat,
-        "1U": MM5EnergyLinkType.OneUP
+    valid_targets: dict[str, MM6EnergyLinkType] = {
+        "HP": MM6EnergyLinkType.Life,
+        "GH": MM6EnergyLinkType.GravityHold,
+        "WW": MM6EnergyLinkType.WaterWave,
+        "PS": MM6EnergyLinkType.PowerStone,
+        "GA": MM6EnergyLinkType.GyroAttack,
+        "SC": MM6EnergyLinkType.StarCrash,
+        "CK": MM6EnergyLinkType.ChargeKick,
+        "NB": MM6EnergyLinkType.NapalmBomb,
+        "CE": MM6EnergyLinkType.CrystalEye,
+        "RC": MM6EnergyLinkType.RushCoil,
+        "RJ": MM6EnergyLinkType.RushJet,
+        "SA": MM6EnergyLinkType.SuperArrow,
+        "BE": MM6EnergyLinkType.Beat,
+        "1U": MM6EnergyLinkType.OneUP
     }
     if target.upper() not in valid_targets:
         logger.warning(f"Unrecognized target {target.upper()}. Available targets: {', '.join(valid_targets.keys())}")
@@ -248,8 +248,8 @@ def cmd_request(self: "BizHawkClientCommandProcessor", amount: str, target: str)
 
 def cmd_autoheal(self: "BizHawkClientCommandProcessor") -> None:
     """Enable auto heal from EnergyLink."""
-    if self.ctx.game != "Mega Man 5":
-        logger.warning("This command can only be used when playing Mega Man 5.")
+    if self.ctx.game != "Mega Man 6":
+        logger.warning("This command can only be used when playing Mega Man 6.")
         return
     if not self.ctx.server or not self.ctx.slot:
         logger.warning("You must be connected to a server to use this command.")
@@ -265,13 +265,13 @@ def cmd_autoheal(self: "BizHawkClientCommandProcessor") -> None:
 
 
 def get_sfx_writes(sfx: int) -> tuple[int, bytes, str]:
-    return MM5_SFX_QUEUE, sfx.to_bytes(1, 'little'), "WRAM"
+    return MM6_SFX_QUEUE, sfx.to_bytes(1, 'little'), "WRAM"
 
 
 class MegaMan5Client(BizHawkClient):
-    game = "Mega Man 5"
+    game = "Mega Man 6"
     system = "NES"
-    patch_suffix = ".apmm5"
+    patch_suffix = ".apmm6"
     item_queue: list[NetworkItem] = []
     pending_death_link: bool = False
     # default to true, as we don't want to send a deathlink until Mega Man's HP is initialized once
@@ -282,12 +282,12 @@ class MegaMan5Client(BizHawkClient):
     weapon_energy: int = 0
     health_energy: int = 0
     auto_heal: bool = False
-    refill_queue: list[tuple[MM5EnergyLinkType, int]] = []
+    refill_queue: list[tuple[MM6EnergyLinkType, int]] = []
     last_death_link: float = 0.0
 
     async def validate_rom(self, ctx: "BizHawkClientContext") -> bool:
         from worlds._bizhawk import RequestFailedError, read, get_memory_size
-        from . import MM5World
+        from . import MM6World
 
         try:
             if (await get_memory_size(ctx.bizhawk_ctx, "PRG ROM")) < 0x3FFF0:
@@ -304,14 +304,14 @@ class MegaMan5Client(BizHawkClient):
             logger.warning({a[0]})
             game_name, version = (await read(ctx.bizhawk_ctx, [(0x3FD90, 21, "PRG ROM"),
                                                                (0x3FDA6, 3, "PRG ROM")]))
-            if game_name[:3] != b"MM5" or version != bytes(MM5World.world_version):
-                if game_name[:3] == b"MM5":
+            if game_name[:3] != b"MM6" or version != bytes(MM6World.world_version):
+                if game_name[:3] == b"MM6":
                     # I think this is an easier check than the other?
                     older_version = f"{version[0]}.{version[1]}.{version[2]}"
-                    logger.warning(f"This Mega Man 5 patch was generated for an different version of the apworld. "
+                    logger.warning(f"This Mega Man 6 patch was generated for an different version of the apworld. "
                                    f"Please use that version to connect instead.\n"
                                    f"Patch version: ({older_version})\n"
-                                   f"Client version: ({'.'.join([str(i) for i in MM5World.world_version])})")
+                                   f"Client version: ({'.'.join([str(i) for i in MM6World.world_version])})")
                 if "pool" in ctx.command_processor.commands:
                     ctx.command_processor.commands.pop("pool")
                 if "request" in ctx.command_processor.commands:
@@ -386,22 +386,22 @@ class MegaMan5Client(BizHawkClient):
         (robot_masters_unlocked, robot_masters_defeated, castle_status, proto_man_unlocked,
          sent_weapons, received_items, consumable_checks, e_tanks, m_tanks, lives, weapon_energy, health, state, bar_state,
          current_stage, energy_link_packet,) = await read(ctx.bizhawk_ctx, [
-            (MM5_ROBOT_MASTERS_UNLOCKED, 1, "WRAM"),
-            (MM5_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
-            (MM5_CASTLE_STATUS, 1, "RAM"),
-            (MM5_PROTO_MAN_UNLOCKED, 1, "WRAM"),
-            (MM5_SENT_WEAPONS, 15, "WRAM"),
-            (MM5_RECEIVED_ITEMS, 1, "WRAM"),
-            (MM5_CONSUMABLES, 32, "RAM"),  # Could be more but 16 definitely catches all current
-            (MM5_E_TANKS, 1, "RAM"),
-            (MM5_M_TANKS, 1, "RAM"),
-            (MM5_LIVES, 1, "RAM"),
-            (MM5_WEAPON_ENERGY, 15, "RAM"),
-            (MM5_HEALTH, 1, "RAM"),
-            (MM5_MEGAMAN_STATE, 1, "RAM"),
-            (MM5_ENERGY_BAR, 2, "RAM"),
-            (MM5_CURRENT_STAGE, 1, "RAM"),
-            (MM5_ENERGYLINK_HEALTH, 3, "WRAM"),
+            (MM6_ROBOT_MASTERS_UNLOCKED, 1, "WRAM"),
+            (MM6_ROBOT_MASTERS_DEFEATED, 1, "RAM"),
+            (MM6_CASTLE_STATUS, 1, "RAM"),
+            (MM6_PROTO_MAN_UNLOCKED, 1, "WRAM"),
+            (MM6_SENT_WEAPONS, 15, "WRAM"),
+            (MM6_RECEIVED_ITEMS, 1, "WRAM"),
+            (MM6_CONSUMABLES, 32, "RAM"),  # Could be more but 16 definitely catches all current
+            (MM6_E_TANKS, 1, "RAM"),
+            (MM6_M_TANKS, 1, "RAM"),
+            (MM6_LIVES, 1, "RAM"),
+            (MM6_WEAPON_ENERGY, 15, "RAM"),
+            (MM6_HEALTH, 1, "RAM"),
+            (MM6_MEGAMAN_STATE, 1, "RAM"),
+            (MM6_ENERGY_BAR, 2, "RAM"),
+            (MM6_CURRENT_STAGE, 1, "RAM"),
+            (MM6_ENERGYLINK_HEALTH, 3, "WRAM"),
         ])
 
         if bar_state[0] not in (0x00, 0x80):
@@ -420,7 +420,7 @@ class MegaMan5Client(BizHawkClient):
         # only handle deathlink in bar state 0x80 (in stage)
         if bar_state[0] == 0x80:
             if self.pending_death_link:
-                writes.append((MM5_MEGAMAN_SPIKE, bytes([0xF0]), "RAM"))
+                writes.append((MM6_MEGAMAN_SPIKE, bytes([0xF0]), "RAM"))
                 self.pending_death_link = False
                 self.sending_death_link = True
             if "DeathLink" in ctx.tags and ctx.last_death_link + 1 < time.time():
@@ -442,40 +442,40 @@ class MegaMan5Client(BizHawkClient):
             if item.item & 0x120 == 0:
                 # Robot Master Weapon, or Rush
                 new_weapons = item.item & 0xFF
-                weapon_energy[MM5_WEAPONS[new_weapons]] |= 0x9C
-                writes.append((MM5_WEAPON_ENERGY, weapon_energy, "RAM"))
+                weapon_energy[MM6_WEAPONS[new_weapons]] |= 0x9C
+                writes.append((MM6_WEAPON_ENERGY, weapon_energy, "RAM"))
                 writes.append(get_sfx_writes(0x33))
             elif item.item & 0x20 == 0:
                 # Robot Master Stage Access
                 # Catch Cossack here
                 if item.item & 0x10:
-                    ptr = MM5_PROTO_MAN_UNLOCKED
+                    ptr = MM6_PROTO_MAN_UNLOCKED
                     unlocked = proto_man_unlocked
                     new = (1 << (item.item & 0xF))
                 else:
-                    ptr = MM5_ROBOT_MASTERS_UNLOCKED
+                    ptr = MM6_ROBOT_MASTERS_UNLOCKED
                     unlocked = robot_masters_unlocked
                     new = (1 << ((item.item & 0xF) - 1))
                 new_stages = unlocked[0] | new
                 print(new_stages)
                 writes.append((ptr, new_stages.to_bytes(1, 'little'), "WRAM"))
                 writes.append(get_sfx_writes(0x2C))
-                writes.append((MM5_RBM_STROBE, b"\x01", "WRAM"))
+                writes.append((MM6_RBM_STROBE, b"\x01", "WRAM"))
             elif item.item == 0x25:
                 # Charge Buster
-                writes.append((MM5_CHARGE_BUSTER, int.to_bytes(1, 1, "little"), "WRAM"))
+                writes.append((MM6_CHARGE_BUSTER, int.to_bytes(1, 1, "little"), "WRAM"))
                 writes.append(get_sfx_writes(0x2F))
             else:
                 # append to the queue, so we handle it later
                 self.item_queue.append(item)
             recv_amount += 1
-            writes.append((MM5_RECEIVED_ITEMS, recv_amount.to_bytes(1, 'little'), "WRAM"))
+            writes.append((MM6_RECEIVED_ITEMS, recv_amount.to_bytes(1, 'little'), "WRAM"))
 
         for i in range(3):
             value = energy_link_packet[i]
             if not value:
                 continue
-            exchange_rate = MM5_ENERGYLINK_EXCHANGE_RATES[i]
+            exchange_rate = MM6_ENERGYLINK_EXCHANGE_RATES[i]
             contribution = (value * exchange_rate) >> 1
             if contribution:
                 await ctx.send_msgs([{
@@ -483,7 +483,7 @@ class MegaMan5Client(BizHawkClient):
                         [{"operation": "add", "value": contribution},
                          {"operation": "max", "value": 0}]}])
             logger.info(f"Deposited {contribution / HP_EXCHANGE_RATE} health into the pool.")
-            writes.append((MM5_ENERGYLINK_HEALTH + i, 0x00.to_bytes(1, "little"), "WRAM"))
+            writes.append((MM6_ENERGYLINK_HEALTH + i, 0x00.to_bytes(1, "little"), "WRAM"))
 
         if self.weapon_energy:
             # Weapon Energy
@@ -497,11 +497,11 @@ class MegaMan5Client(BizHawkClient):
                     self.weapon_energy -= missing
                     weapon_energy[i] = weapon + missing
                     if not self.weapon_energy:
-                        writes.append((MM5_WEAPON_ENERGY, weapon_energy, "RAM"))
+                        writes.append((MM6_WEAPON_ENERGY, weapon_energy, "RAM"))
                         break
             else:
                 if current_energy != self.weapon_energy:
-                    writes.append((MM5_WEAPON_ENERGY, weapon_energy, "RAM"))
+                    writes.append((MM6_WEAPON_ENERGY, weapon_energy, "RAM"))
 
         if self.health_energy or self.auto_heal:
             # Health Energy
@@ -522,13 +522,13 @@ class MegaMan5Client(BizHawkClient):
                             [{"operation": "add", "value": -health_diff * HP_EXCHANGE_RATE},
                              {"operation": "max", "value": 0}]}])
                 current_health += health_diff
-                writes.append((MM5_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
+                writes.append((MM6_HEALTH, current_health.to_bytes(1, 'little'), "RAM"))
 
         if self.refill_queue:
             refill_type, refill_amount = self.refill_queue.pop()
-            if refill_type == MM5EnergyLinkType.Life:
+            if refill_type == MM6EnergyLinkType.Life:
                 exchange_rate = HP_EXCHANGE_RATE
-            elif refill_type == MM5EnergyLinkType.OneUP:
+            elif refill_type == MM6EnergyLinkType.OneUP:
                 exchange_rate = ONEUP_EXCHANGE_RATE
             else:
                 exchange_rate = WEAPON_EXCHANGE_RATE
@@ -542,16 +542,16 @@ class MegaMan5Client(BizHawkClient):
                     "cmd": "Set", "key": f"EnergyLink{ctx.team}", "slot": ctx.slot, "operations":
                         [{"operation": "add", "value": -request},
                          {"operation": "max", "value": 0}]}])
-                if refill_type == MM5EnergyLinkType.Life:
-                    refill_ptr = MM5_HEALTH
-                elif refill_type == MM5EnergyLinkType.OneUP:
-                    refill_ptr = MM5_LIVES
+                if refill_type == MM6EnergyLinkType.Life:
+                    refill_ptr = MM6_HEALTH
+                elif refill_type == MM6EnergyLinkType.OneUP:
+                    refill_ptr = MM6_LIVES
                 else:
-                    refill_ptr = MM5_WEAPON_ENERGY + MM5_WEAPONS[refill_type]
+                    refill_ptr = MM6_WEAPON_ENERGY + MM6_WEAPONS[refill_type]
                 current_value = (await read(ctx.bizhawk_ctx, [(refill_ptr, 1, "RAM")]))[0][0]
-                if refill_type == MM5EnergyLinkType.OneUP:
+                if refill_type == MM6EnergyLinkType.OneUP:
                     current_value = from_oneup_format(current_value)
-                new_value = min(0x9C if refill_type != MM5EnergyLinkType.OneUP else 9, current_value + refill_amount)
+                new_value = min(0x9C if refill_type != MM6EnergyLinkType.OneUP else 9, current_value + refill_amount)
                 writes.append((refill_ptr, new_value.to_bytes(1, "little"), "RAM"))
 
         if len(self.item_queue):
@@ -564,7 +564,7 @@ class MegaMan5Client(BizHawkClient):
                     self.item_queue.append(item)
                 else:
                     current_lives += 1
-                    writes.append((MM5_LIVES, current_lives.to_bytes(1, 'little'), "RAM"))
+                    writes.append((MM6_LIVES, current_lives.to_bytes(1, 'little'), "RAM"))
                     writes.append(get_sfx_writes(0x1F))
             elif idx == 1:
                 self.weapon_energy += 0xE
@@ -578,7 +578,7 @@ class MegaMan5Client(BizHawkClient):
                     self.item_queue.append(item)
                 else:
                     current_e_tanks += 1
-                    writes.append((MM5_E_TANKS, current_e_tanks.to_bytes(1, 'little'), "RAM"))
+                    writes.append((MM6_E_TANKS, current_e_tanks.to_bytes(1, 'little'), "RAM"))
                     writes.append(get_sfx_writes(0x1F))
             elif idx == 4:
                 current_m_tanks = m_tanks[0]
@@ -586,7 +586,7 @@ class MegaMan5Client(BizHawkClient):
                     self.item_queue.append(item)
                 else:
                     current_m_tanks += 1
-                    writes.append((MM5_M_TANKS, current_m_tanks.to_bytes(1, 'little'), "RAM"))
+                    writes.append((MM6_M_TANKS, current_m_tanks.to_bytes(1, 'little'), "RAM"))
                     writes.append(get_sfx_writes(0x1F))
         new_checks = []
 
@@ -601,7 +601,7 @@ class MegaMan5Client(BizHawkClient):
                 # collect here
                 update_castle |= (1 << i)
         if update_castle != castle_status[0]:
-            writes.append((MM5_CASTLE_STATUS, update_castle.to_bytes(1, 'little'), "RAM"))
+            writes.append((MM6_CASTLE_STATUS, update_castle.to_bytes(1, 'little'), "RAM"))
 
         await write(ctx.bizhawk_ctx, writes)
 
@@ -614,7 +614,7 @@ class MegaMan5Client(BizHawkClient):
                 if rbm_id not in ctx.checked_locations:
                     new_checks.append(rbm_id)
 
-        for i, ofs in MM5_WEAPONS.items():
+        for i, ofs in MM6_WEAPONS.items():
             if sent_weapons[ofs]:
                 itm_id = 0x0100 + i
                 if itm_id not in ctx.checked_locations:
@@ -623,7 +623,7 @@ class MegaMan5Client(BizHawkClient):
 
 
         if bar_state[0] == 0x80:  # currently in stage
-            stage_consumables = MM5_CONSUMABLE_TABLE.get(current_stage[0], [])
+            stage_consumables = MM6_CONSUMABLE_TABLE.get(current_stage[0], [])
             for consumable in stage_consumables:
                 consumable_info = stage_consumables[consumable]
                 if consumable not in ctx.checked_locations:

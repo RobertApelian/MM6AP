@@ -162,7 +162,7 @@ class MusicShuffle(Choice):
 
 
 @dataclass
-class MM5Options(PerGameCommonOptions):
+class MM6Options(PerGameCommonOptions):
     death_link: DeathLink
     energy_link: EnergyLink
     starting_robot_master: StartingRobotMaster
